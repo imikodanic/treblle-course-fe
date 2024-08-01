@@ -1,5 +1,5 @@
-interface FetchResponse {
-    data: Course[];
+interface FetchResponse<t> {
+    data: t[];
     meta: {
         pagination: {
             page: number;
@@ -34,23 +34,48 @@ interface Lesson {
     };
 }
 
-export const fetchCourse = async (course: string): Promise<Course | undefined> => {
+export const fetchCourse = async (courseSlug: string): Promise<Course | undefined> => {
     const response = await fetch(
-        `http://localhost:1337/api/courses?filters[slug][$eq]=${course}&populate=*`,
+        `http://localhost:1337/api/courses?filters[slug][$eq]=${courseSlug}&populate=*`,
         {
             method: "GET",
             cache: "no-cache",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer 3a77957b6999712a17686bb365a923bdee53a6ee81736342886837a0e36b6b143cd2e78485512689b0c16b9ecdc1593db47fe0b6512998e9648a31155d3b051961fdd0505cac3ac77a7debef833b6f0d4800cce8734badfbcf9b68f03078a288e53ca4a50c86a4627208b3efe328e39a3d6c0382fba38608e53aee4923bbd253`,
+                Authorization: `Bearer ${process.env["STRAPI_API_KEY"]}`,
             },
         }
     );
 
-    const jsonResponse = (await response.json()) as FetchResponse;
+    console.log(response);
+
+    const jsonResponse = (await response.json()) as FetchResponse<Course>;
 
     if (jsonResponse.data.length === 0) {
         throw new Error("Course not found");
+    }
+
+    return jsonResponse.data[0];
+};
+
+export const fetchLesson = async (lessonSlug: string): Promise<Lesson | undefined> => {
+    console.log("WTF", process.env["STRAPI_API_KEY"]);
+    const response = await fetch(
+        `http://localhost:1337/api/lessons?filters[slug][$eq]=${lessonSlug}&populate=*`,
+        {
+            method: "GET",
+            cache: "no-cache",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env["STRAPI_API_KEY"]}`,
+            },
+        }
+    );
+
+    const jsonResponse = (await response.json()) as FetchResponse<Lesson>;
+
+    if (jsonResponse.data.length === 0) {
+        throw new Error("Lesson not found");
     }
 
     return jsonResponse.data[0];
