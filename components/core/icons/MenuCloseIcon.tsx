@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const MenuCloseIcon = createIcon(
+export const MenuCloseIcon = icon(
     <>
         <path d="M1.5 1.5L13.5 13.5M1.5 13.5L13.5 1.5" stroke="currentColor" />
     </>,

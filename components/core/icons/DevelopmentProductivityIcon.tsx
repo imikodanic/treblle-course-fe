@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const DevelopmentProductivityIcon = createIcon(
+export const DevelopmentProductivityIcon = icon(
     <>
         <rect x="15" y="4" width="7" height="7" rx="1" />
         <path

@@ -2,6 +2,7 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 
+import { Footer } from "~components/core/Footer/Footer";
 import Navbar from "~components/core/Navbar";
 import { cx } from "~styled-system/css";
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: RootLayoutProperties) {
             <body>
                 <Navbar />
                 {children}
+                <Footer />
             </body>
         </html>
     );

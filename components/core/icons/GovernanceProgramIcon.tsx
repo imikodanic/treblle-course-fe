@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const GovernanceProgramIcon = createIcon(
+export const GovernanceProgramIcon = icon(
     <>
         <path d="M9 12l2 2 4-4" strokeLinecap="round" />
         <circle cx="12" cy="12" r="8" />

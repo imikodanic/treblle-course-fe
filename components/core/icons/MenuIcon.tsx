@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const MenuIcon = createIcon(
+export const MenuIcon = icon(
     <>
         <path
             clipRule="evenodd"

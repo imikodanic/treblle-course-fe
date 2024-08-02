@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const EnterpriseIcon = createIcon(
+export const EnterpriseIcon = icon(
     <>
         <g id="icons/enterprise" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <path

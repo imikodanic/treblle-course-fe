@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const ChatsIcon = createIcon(
+export const ChatsIcon = icon(
     <>
         <path
             d="M27,22 C27,23.1045695 26.1045695,24 25,24 L19,24 L15,28 L15,17 C15,15.9 15.9,15 17,15 L25,15 C26.1045695,15 27,15.8954305 27,17 L27,22 Z"

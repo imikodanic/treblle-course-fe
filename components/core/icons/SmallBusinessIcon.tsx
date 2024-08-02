@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const SmallBusinessIcon = createIcon(
+export const SmallBusinessIcon = icon(
     <>
         <path
             d="M11.0000003,15.5 L14.9690002,11.5310005 C15.3072169,11.1907651 15.76726,10.9996204 16.2470001,11 L23.7529999,11 C24.23274,10.9996204 24.6927831,11.1907651 25.0309998,11.5310005 L29.0000003,15.5"

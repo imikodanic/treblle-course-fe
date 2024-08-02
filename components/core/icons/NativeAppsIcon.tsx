@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const NativeAppsIcon = createIcon(
+export const NativeAppsIcon = icon(
     <>
         <rect x="4" y="4" width="7" height="18" rx="1" />
         <rect x="15" y="4" width="7" height="7" rx="1" />

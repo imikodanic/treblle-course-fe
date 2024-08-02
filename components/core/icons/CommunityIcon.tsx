@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const CommunityIcon = createIcon(
+export const CommunityIcon = icon(
     <>
         <path d="M15 20a6 6 0 1 0-12 0" strokeLinecap="round" />
         <circle cx="9" cy="10" r="4" />

@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const SystemStatusIcon = createIcon(
+export const SystemStatusIcon = icon(
     <>
         <path d="M4 4v18h18" strokeLinecap="round" />
         <rect x="8" y="11" width="4" height="7" rx="1" />

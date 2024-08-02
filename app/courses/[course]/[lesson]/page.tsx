@@ -1,17 +1,14 @@
-import Link from "next/link";
+import Markdown from "markdown-to-jsx";
 
-import { ArrowLeftIcon } from "~components/core/icons/ArrowLeftIcon";
-import { ArrowRightIcon } from "~components/core/icons/ArrowRightIcon";
+// import Link from "next/link";
+//
+// import { ArrowLeftIcon } from "~components/core/icons/ArrowLeftIcon";
+// import { ArrowRightIcon } from "~components/core/icons/ArrowRightIcon";
 import { CalendarIcon } from "~components/core/icons/CalendarIcon";
 import { ClockIcon } from "~components/core/icons/ClockIcon";
-import { cx, sva } from "~styled-system/css";
+import { sva } from "~styled-system/css";
 
-import {
-    getCourse,
-    getLesson,
-    getNextLesson,
-    getPreviousLesson,
-} from "../../../../utils/coursesService";
+import { fetchLesson } from "../../../../services/courseService";
 
 interface LessonProperties {
     params: {
@@ -176,22 +173,25 @@ const lessonStyle = sva({
     },
 });
 
-export default function Lesson({ params }: LessonProperties) {
+export default async function Lesson({ params }: LessonProperties) {
     const classes = lessonStyle();
 
-    const course = getCourse(params.course);
-    const lesson = getLesson(course, params.lesson);
+    // const course = fetchCourse(params.course);
+    const lesson = await fetchLesson(params.lesson);
 
-    const nextLesson = getNextLesson(course, lesson);
-    const previousLesson = getPreviousLesson(course, lesson);
+    if (!lesson) {
+        return;
+    }
+    // const nextLesson = getNextLesson(course, lesson);
+    // const previousLesson = getPreviousLesson(course, lesson);
 
     return (
         <div className={classes.root}>
             <div>
                 <div className={classes.videoWrapper}>
                     <iframe
-                        title={lesson.name}
-                        src={lesson.video}
+                        title={lesson.attributes.name}
+                        src={lesson.attributes.video_url}
                         className={classes.video}
                         frameBorder="0"
                         allow="autoplay; fullscreen; picture-in-picture"
@@ -210,53 +210,53 @@ export default function Lesson({ params }: LessonProperties) {
                     </a>
                 </div>
             </div>
-
             <div>
-                <h1 className={classes.title}>{lesson.name}</h1>
+                <h1 className={classes.title}>{lesson.attributes.name}</h1>
                 <div className={classes.aboutCard}>
                     <p className={classes.aboutCardTitle}>About this lesson</p>
-                    <p className={classes.aboutCardText}>{lesson.about}</p>
+                    <p className={classes.aboutCardText}>{lesson.attributes.about}</p>
                     <div className={classes.aboutCardInfo}>
                         <span className={classes.aboutCardInfoItem}>
-                            <ClockIcon className={classes.aboutCardInfoIcon} /> {lesson.duration}
+                            <ClockIcon className={classes.aboutCardInfoIcon} />{" "}
+                            {lesson.attributes.duration}
                         </span>
                         <span className={classes.aboutCardInfoItem}>
                             <CalendarIcon className={classes.aboutCardInfoIcon} />{" "}
-                            {lesson.publishedAt}
+                            {lesson.attributes.publishedAt}
                         </span>
                     </div>
                 </div>
-                <div>{lesson.script}</div>
+                <Markdown>{lesson.attributes.video_script}</Markdown>
             </div>
 
-            <div className={classes.lessonNav}>
-                {previousLesson ? (
-                    <Link
-                        className={classes.lessonNavCard}
-                        href={`/courses/${params.course}/${previousLesson.slug}`}
-                    >
-                        <span className={classes.lessonNavCardLabel}>
-                            <ArrowLeftIcon className={classes.lessonNavCardLabelIcon} />
-                            Previous lesson
-                        </span>
-                        <span className={classes.lessonNavCardName}>{previousLesson.name}</span>
-                    </Link>
-                ) : (
-                    <div className={classes.lessonEmptyCardDiv}></div>
-                )}
-                {nextLesson && (
-                    <Link
-                        className={cx(classes.lessonNavCard, classes.lessonNavCardNext)}
-                        href={`/courses/${params.course}/${nextLesson.slug}`}
-                    >
-                        <span className={classes.lessonNavCardLabel}>
-                            Next lesson{" "}
-                            <ArrowRightIcon className={classes.lessonNavCardLabelIcon} />
-                        </span>
-                        <span className={classes.lessonNavCardName}>{nextLesson.name}</span>
-                    </Link>
-                )}
-            </div>
+            {/*<div className={classes.lessonNav}>*/}
+            {/*    {previousLesson ? (*/}
+            {/*        <Link*/}
+            {/*            className={classes.lessonNavCard}*/}
+            {/*            href={`/courses/${params.course}/${previousLesson.slug}`}*/}
+            {/*        >*/}
+            {/*            <span className={classes.lessonNavCardLabel}>*/}
+            {/*                <ArrowLeftIcon className={classes.lessonNavCardLabelIcon} />*/}
+            {/*                Previous lesson*/}
+            {/*            </span>*/}
+            {/*            <span className={classes.lessonNavCardName}>{previousLesson.name}</span>*/}
+            {/*        </Link>*/}
+            {/*    ) : (*/}
+            {/*        <div className={classes.lessonEmptyCardDiv}></div>*/}
+            {/*    )}*/}
+            {/*    {nextLesson && (*/}
+            {/*        <Link*/}
+            {/*            className={cx(classes.lessonNavCard, classes.lessonNavCardNext)}*/}
+            {/*            href={`/courses/${params.course}/${nextLesson.slug}`}*/}
+            {/*        >*/}
+            {/*            <span className={classes.lessonNavCardLabel}>*/}
+            {/*                Next lesson{" "}*/}
+            {/*                <ArrowRightIcon className={classes.lessonNavCardLabelIcon} />*/}
+            {/*            </span>*/}
+            {/*            <span className={classes.lessonNavCardName}>{nextLesson.name}</span>*/}
+            {/*        </Link>*/}
+            {/*    )}*/}
+            {/*</div>*/}
         </div>
     );
 }

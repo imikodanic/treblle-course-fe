@@ -1,6 +1,6 @@
-import { createIcon } from "../../../utils/createIcon";
+import { icon } from "./Icon";
 
-export const CaseStudyIcon = createIcon(
+export const CaseStudyIcon = icon(
     <>
         <path d="M3 4.25h20" />
         <path d="M22 4.25v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-11" />
