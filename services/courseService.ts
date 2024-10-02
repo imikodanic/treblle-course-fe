@@ -1,82 +1,60 @@
-interface FetchResponse<t> {
-    data: t[];
-    meta: {
-        pagination: {
-            page: number;
-            pageSize: number;
-            pageCount: number;
-            total: number;
-        };
-    };
-}
+import { courses } from "../data/coursesData";
 
 interface Course {
-    id: number;
-    attributes: {
-        slug: string;
-        name: string;
-        description: string;
-        publishedAt: string;
-        lessons: { data: Lesson[] };
-    };
+    slug: string;
+    name: string;
+    description: string;
+    lessons: Lesson[];
 }
 
 interface Lesson {
-    id: number;
-    attributes: {
-        slug: string;
-        name: string;
-        about: string;
-        duration: string;
-        video_url: string;
-        video_script: string;
-        publishedAt: string;
-    };
+    slug: string;
+    name: string;
+    about: string;
+    duration: string;
+    video: string;
+    script: string;
+    publishedAt: string;
 }
 
-export const fetchCourse = async (courseSlug: string): Promise<Course | undefined> => {
-    const response = await fetch(
-        `http://localhost:1337/api/courses?filters[slug][$eq]=${courseSlug}&populate=*`,
-        {
-            method: "GET",
-            cache: "no-cache",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env["STRAPI_API_KEY"]}`,
-            },
-        }
-    );
+const getCourse = (courseSlug: string): Course | undefined => {
+    const course = courses.find((course) => course.slug === courseSlug);
 
-    console.log(response);
-
-    const jsonResponse = (await response.json()) as FetchResponse<Course>;
-
-    if (jsonResponse.data.length === 0) {
-        throw new Error("Course not found");
+    if (!course) {
+        return undefined;
     }
 
-    return jsonResponse.data[0];
+    return course;
 };
 
-export const fetchLesson = async (lessonSlug: string): Promise<Lesson | undefined> => {
-    console.log("WTF", process.env["STRAPI_API_KEY"]);
-    const response = await fetch(
-        `http://localhost:1337/api/lessons?filters[slug][$eq]=${lessonSlug}&populate=*`,
-        {
-            method: "GET",
-            cache: "no-cache",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env["STRAPI_API_KEY"]}`,
-            },
-        }
-    );
+const getLesson = (course: Course, lessonSlug: string): Lesson | undefined => {
+    const lesson = course.lessons.find((lesson) => lesson.slug === lessonSlug);
 
-    const jsonResponse = (await response.json()) as FetchResponse<Lesson>;
-
-    if (jsonResponse.data.length === 0) {
-        throw new Error("Lesson not found");
+    if (!lesson) {
+        return undefined;
     }
 
-    return jsonResponse.data[0];
+    return lesson;
 };
+
+const getNextLesson = (course: Course, lesson: Lesson): undefined | Lesson => {
+    const lessonIndex = course.lessons.findIndex((l) => l.slug === lesson.slug);
+
+    if (lessonIndex === course.lessons.length - 1) {
+        return undefined;
+    }
+
+    return course.lessons[lessonIndex + 1];
+};
+
+const getPreviousLesson = (course: Course, lesson: Lesson): undefined | Lesson => {
+    const lessonIndex = course.lessons.findIndex((l) => l.slug === lesson.slug);
+
+    if (lessonIndex === 0) {
+        return undefined;
+    }
+
+    return course.lessons[lessonIndex - 1];
+};
+
+export { getCourse, getLesson, getNextLesson, getPreviousLesson };

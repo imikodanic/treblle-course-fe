@@ -1,11 +1,13 @@
+"use client";
+
 import "../../globals.css";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-// import { usePathname } from "next/navigation";
 import { cx, sva } from "~styled-system/css";
 
-import { fetchCourse } from "../../../services/courseService";
+import { getCourse } from "../../../services/courseService";
 import type { CourseProperties } from "./page";
 
 type LayoutProperties = Readonly<{
@@ -110,14 +112,14 @@ const courseLayout = sva({
     },
 });
 
-export default async function Layout({ children, params }: LayoutProperties) {
-    // const pathname = usePathname();
+export default function Layout({ children, params }: LayoutProperties) {
+    const pathname = usePathname();
 
     if (!params?.course) {
         return;
     }
 
-    const course = await fetchCourse(params.course);
+    const course = getCourse(params.course);
 
     if (!course) {
         return;
@@ -129,29 +131,25 @@ export default async function Layout({ children, params }: LayoutProperties) {
         <>
             <div className={classes.root}>
                 <header className={classes.header}>
-                    <h1>{course.attributes.name}</h1>
+                    <h1>{course.name}</h1>
                 </header>
                 <main className={classes.main}>
                     <div className={classes.lessonsList}>
-                        {course.attributes.lessons.data.map((lesson, index) => (
+                        {course.lessons.map((lesson, index) => (
                             <Link
-                                href={`/courses/${params.course}/${lesson.attributes.slug}`}
-                                key={lesson.attributes.slug}
+                                href={`/courses/${params.course}/${lesson.slug}`}
+                                key={lesson.slug}
                                 className={cx(
-                                    classes.lessonListCard
-                                    // pathname === `/courses/${params.course}/${lesson.slug}` &&
-                                    //     classes.activeLessonCard
+                                    classes.lessonListCard,
+                                    pathname === `/courses/${params.course}/${lesson.slug}` &&
+                                        classes.activeLessonCard
                                 )}
                             >
                                 <h3 className={classes.lessonListCardTitle}>
-                                    {index + 1}. {lesson.attributes.name}
+                                    {index + 1}. {lesson.name}
                                 </h3>
-                                <p className={classes.lessonListCardDescription}>
-                                    {lesson.attributes.about}
-                                </p>
-                                <p className={classes.lessonListCardDuration}>
-                                    {lesson.attributes.duration}
-                                </p>
+                                <p className={classes.lessonListCardDescription}>{lesson.about}</p>
+                                <p className={classes.lessonListCardDuration}>{lesson.duration}</p>
                             </Link>
                         ))}
                     </div>
